@@ -1,4 +1,4 @@
-import { throttle } from 'lodash';
+import { throttle } from 'lodash.throttle';
 
 const form = document.querySelector('.feedback-form');
 const email = document.querySelector('input[name="email"]');
@@ -23,7 +23,7 @@ form.addEventListener('submit', e => {
 const load = key => {
     try {
         const serializedState = localStorege.getItem(key);
-        return serializedState === null ? undefined : JSON.parse(serializedState;)
+        return serializedState === null ? undefined : JSON.parse(serializedState);
     } catch(error) {
         console.error('Get state error: ', error.message);
     }
