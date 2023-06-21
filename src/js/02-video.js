@@ -9,13 +9,3 @@ player.on('timeupdate',  throttle( e => {
     }, 1000)
     );
 
-player
-.setCurrentTime(localStorage.getItem('videoplayer-current-time'))
-.catch(function (error) {
-    console.error(error)
-});
-
-// var throttle = throttle(localStorage.setItem, 50000, {trailing: true});
-// player.on('timeupdate', throttle(function(data) {
-//     window.localStorage.setItem("videoplayer-current-time", data.seconds);
-// }, 250));
