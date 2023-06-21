@@ -1,36 +1,53 @@
-import { throttle } from 'lodash.throttle';
+import throttle from "lodash.throttle";
 
 const form = document.querySelector('.feedback-form');
-const email = document.querySelector('input[name="email"]');
-const message = document.querySelector('input[name="message"]');
-const LocalStorageKey = 'feedback-form-state';
+const email = document.querySelector('input');
+const message = document.querySelector('textarea');
+const LOCALSTORAGE_KEY = 'feedback-form-state';
 
-form.addEventListener(
-    'input',
-    throttle(e => {
-        const objectToSave = {email: email, message: message.value};
-        localStorage.setItem(LocalStorageKey, JSON.stringify(objectToSave));
+let formDate= {
+    email: "",
+    message: ""
+}
+updateForm();
+
+email.addEventListener('input', throttle(() => {
+        formDate.email = email.value;
+        localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(formDate));
     }, 500)
 );
 
-form.addEventListener('submit', e => {
-    e.preventDefault();
-    console.log({email: email, message: message.value});
-    form.requestFullscreen();
-    localStorage.removeItem(LocalStorageKey);
-});
+message.addEventListener('input', throttle (() => {
+    formDate.message = message.value;
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(formDate));
+}, 500)
+);
 
-const load = key => {
-    try {
-        const serializedState = localStorege.getItem(key);
-        return serializedState === null ? undefined : JSON.parse(serializedState);
-    } catch(error) {
-        console.error('Get state error: ', error.message);
+form.addEventListener("submit", handleSubmit)
+
+function updateForm()  {
+    if (localStorage.getItem(LOCALSTORAGE_KEY)) {
+        formDate.email = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)).email;
+        formDate.message = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)).message;
+        email.value = formDate.email;
+        message.value = formDate.message;
+    } else {
+        return;
     }
-};
+}
 
-const storageData = load(LocalStorageKey);
-if (storageDate) {
-    email.value = storage.email;
-    message.value = storage.message;
+function handleSubmit(event) {
+    event.preventDefault();
+
+    if (email.value && message.value) {
+    console.log(formDate);
+    localStorage.clear();
+    event.currentTarget.reset();
+    formDate = {
+        email: "",
+        message: ""
+    }
+    } else {
+        alert("All fields must be filled!")
+    }
 }
